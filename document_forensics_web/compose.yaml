@@ -1,0 +1,28 @@
+services:
+  watermarks:
+    image: ${WATERMARKS_IMAGE:-ghcr.io/guillaumemeyer/watermarks-remover:latest}
+    command: ["python3", "/app/scripts/server.py", "--host", "0.0.0.0", "--port", "8765"]
+    environment:
+      WATERMARKS_SERVER_API_KEY: ${WATERMARKS_API_KEY:-troque-esta-chave-em-producao}
+    restart: unless-stopped
+    networks:
+      - internal
+
+  web:
+    build: .
+    environment:
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-75}
+      JOB_TTL_MINUTES: ${JOB_TTL_MINUTES:-30}
+      WATERMARKS_SERVICE_URL: ${WATERMARKS_SERVICE_URL:-http://watermarks:8765}
+      WATERMARKS_API_KEY: ${WATERMARKS_API_KEY:-troque-esta-chave-em-producao}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    depends_on:
+      - watermarks
+    restart: unless-stopped
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge

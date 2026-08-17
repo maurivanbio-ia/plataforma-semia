@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Document Provenance Analyzer</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">DOCUMENT INTELLIGENCE</div>
+        <h1>Proveniência, metadados e higienização documental</h1>
+        <p class="subtitle">Envie um arquivo. A plataforma inspeciona sinais técnicos verificáveis, estrutura, metadados e proveniência. O original não é sobrescrito.</p>
+      </div>
+      <div id="healthBadge" class="health pending">Verificando serviço…</div>
+    </header>
+
+    <section class="panel upload-panel">
+      <label id="dropzone" class="dropzone" for="fileInput">
+        <input id="fileInput" type="file" hidden />
+        <div class="drop-icon">⇧</div>
+        <div class="drop-title">Arraste o arquivo aqui</div>
+        <div class="drop-sub">ou clique para selecionar</div>
+        <div class="formats">DOCX · PDF · PNG · JPG · ODT · EPUB · HTML · Markdown · TXT</div>
+      </label>
+      <div id="selectedFile" class="selected-file hidden"></div>
+      <div class="actions">
+        <button id="analyzeBtn" class="btn primary" disabled>Analisar arquivo</button>
+        <button id="resetBtn" class="btn ghost" disabled>Limpar tela</button>
+      </div>
+      <div id="status" class="status hidden"></div>
+    </section>
+
+    <section id="results" class="hidden">
+      <div class="results-head">
+        <div>
+          <div class="eyebrow">RESULTADO</div>
+          <h2 id="resultTitle">Análise concluída</h2>
+        </div>
+        <div class="actions compact">
+          <a id="reportDownloadPdf" class="btn ghost" href="#">Baixar PDF</a>
+          <a id="reportDownload" class="btn ghost" href="#">Baixar JSON</a>
+          <button id="cleanBtn" class="btn primary">Gerar cópia higienizada</button>
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <article class="metric">
+          <span class="metric-label">Status técnico</span>
+          <strong id="metricStatus">—</strong>
+        </article>
+        <article class="metric">
+          <span class="metric-label">SHA-256</span>
+          <strong id="metricHash" class="mono small">—</strong>
+        </article>
+        <article class="metric">
+          <span class="metric-label">Tamanho</span>
+          <strong id="metricSize">—</strong>
+        </article>
+        <article class="metric">
+          <span class="metric-label">Formato</span>
+          <strong id="metricFormat">—</strong>
+        </article>
+      </div>
+
+      <section class="panel">
+        <h3>Achados principais</h3>
+        <div id="findings" class="findings"></div>
+        <div id="disclaimer" class="disclaimer"></div>
+      </section>
+
+      <div class="two-col">
+        <section class="panel">
+          <h3>Inspeção do serviço</h3>
+          <div id="serviceSummary" class="kv"></div>
+        </section>
+        <section class="panel">
+          <h3>Data Loss Prevention (DLP / PII)</h3>
+          <div id="dlpSummary" class="kv"></div>
+        </section>
+      </div>
+
+      <div class="two-col">
+        <section class="panel">
+          <h3>Propriedades centrais</h3>
+          <div id="coreProps" class="kv"></div>
+        </section>
+      </div>
+
+      <div class="two-col">
+        <section class="panel">
+          <h3>Histórico e estrutura DOCX</h3>
+          <div id="docxHistory" class="kv"></div>
+        </section>
+        <section class="panel">
+          <h3>Custom XML / fluxo corporativo</h3>
+          <div id="customXml" class="kv"></div>
+        </section>
+      </div>
+
+      <section class="panel">
+        <div class="section-title-row">
+          <h3>Imagens incorporadas</h3>
+          <span id="mediaCount" class="pill">0</span>
+        </div>
+        <div id="mediaTableWrap" class="table-wrap"></div>
+      </section>
+
+      <section class="panel">
+        <details>
+          <summary>Relatório técnico bruto</summary>
+          <pre id="rawReport"></pre>
+        </details>
+      </section>
+
+      <section id="cleanResult" class="panel clean-panel hidden">
+        <div class="section-title-row">
+          <div>
+            <div class="eyebrow">HIGIENIZAÇÃO</div>
+            <h3>Cópia higienizada gerada</h3>
+          </div>
+          <a id="cleanDownload" class="btn primary" href="#">Baixar arquivo cleaned</a>
+        </div>
+        <div class="two-col">
+          <div>
+             <h4>Metadados</h4>
+             <div id="cleanMeta" class="kv"></div>
+          </div>
+          <div>
+             <h4>Modificações estruturais (Diff)</h4>
+             <div id="cleanDiff" class="kv"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
